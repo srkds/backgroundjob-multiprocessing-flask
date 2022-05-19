@@ -5,13 +5,21 @@ from multiprocessing import Process
 import asyncio
 from pyppeteer import launch
 from PyPDF2 import PdfFileMerger
+import json
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*":{"origin":"*"}})
 
 @app.route("/",methods=['GET'])
 def helloWorld():
-    return "Hello World"
+    """ 
+    Use this route to get status of the background work
+    """
+    with open("mock_db.json", "r") as openfile:
+        json_obj  = json.load(openfile)
+
+    print(json_obj)
+    return json_obj
 
 @app.route("/task/<job_id>",methods=['POST'])
 def task(job_id):
@@ -23,6 +31,19 @@ def task(job_id):
     # return output,201
     # task_cb = Process(target=run_task, args=(body_job_id,body_operator))
     # va1 = 10
+
+
+    """ Updating work status """
+
+    dictnary = {
+        "status": "Not Yet Started",
+    }
+
+    json_object = json.dumps(dictnary, indent = 4)
+
+    with open("mock_db.json", "w") as outfile:
+        outfile.write(json_object)
+
     task_cb = Process(target=test)
     # task_cb2 = Process(target=test)
     task_cb.start()
@@ -36,6 +57,18 @@ def test():
 
 async def run_task():
     print("Inside .............")
+
+    """ Updating status to inprogress """
+
+    dictnary = {
+        "status": "InProgress",
+    }
+
+    json_object = json.dumps(dictnary, indent = 4)
+
+    with open("mock_db.json", "w") as outfile:
+        outfile.write(json_object)
+
     browser = await launch()
     page = await browser.newPage()
     await page.goto('https://google.com',timeout=1800000)
@@ -56,6 +89,18 @@ async def run_task():
     print(dimensions)
     # >>> {'width': 800, 'height': 600, 'deviceScaleFactor': 1}
     await browser.close()
+
+    """ Updating Status to complete """
+
+    dictnary = {
+        "status": "Completed"
+    }
+
+    json_object = json.dumps(dictnary, indent = 4)
+
+    with open("mock_db.json", "w") as outfile:
+        outfile.write(json_object)
+
     print("done")
     return "done", 202
 

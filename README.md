@@ -14,3 +14,4 @@ send `post` request to `http://127.0.0.1:6060/task/<any number>` with following 
 }
 ```
 
+send `GET` request to `http://127.0.0.1:6060/` for getting status of background task
