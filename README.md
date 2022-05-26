@@ -1,6 +1,11 @@
 # Introduction
 
 This project is about background job multiprocessing.
+**Tasks**
+- [x] Generate Pdf using multiprocessing in background
+- [x] Set multiprocessing process a cpu affinity
+- [x] Upload generated pdf to AWS S3 bucket
+- [x] Route to get a status of background task
 ## Idea
 ### Ideal case without this implementation
 The client sends a request for performing heavy jobs something as generating pdf, or any other time and resource taking jobs. the server will receive this request and start performing the task and the `client has to wait for a response` then after client can do other things like moving around.
@@ -15,13 +20,13 @@ Run following command
 python3 my_api.py
 ```
 
-send `post` request to `http://127.0.0.1:6060/task/<any number>` with following body
+send `post` request to `http://127.0.0.1:6060/api/generate/pdf` with following body
 
 ```json
 {
-    "job_id":12312312,
+    "html_url":"none",
     "operator": 34
 }
 ```
 
-send `GET` request to `http://127.0.0.1:6060/` for getting status of background task
+send `GET` request to `http://127.0.0.1:6060/api/jobstatus` for getting status of background task
