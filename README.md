@@ -1,5 +1,7 @@
 # Introduction
 
+<img src="./ss/diagram.jpg" width="100%"/>
+
 This project is about background job multiprocessing.
 **Tasks**
 - [x] Generate Pdf using multiprocessing in background
